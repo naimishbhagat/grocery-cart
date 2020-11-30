@@ -2,6 +2,8 @@ import React from "react";
 
 import { connect } from "react-redux";
 
+import { removeFromCart } from "./actions";
+
 const GroceryCart = ({ items = [], removeFromCart }) => {
   const total = () => {
     return items.reduce((total, item) => {
@@ -51,7 +53,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     removeFromCart: (index) => {
-      dispatch({ type: "REMOVE_FROM_CART", payload: index });
+      dispatch(removeFromCart(index));
     },
   };
 };

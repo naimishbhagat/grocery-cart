@@ -1,3 +1,4 @@
+import { ADD_TO_CART, REMOVE_FROM_CART, UNDO, REDO } from "./actions";
 const GROCERY_ITEMS = [
   { name: "Sliced Bread", price: 5.79 },
   { name: "Pasta", price: 1.28 },
@@ -26,10 +27,12 @@ const reducer = (state, action) => {
     };
   }
   switch (action.type) {
-    case "ADD_TO_CART": {
+    case ADD_TO_CART: {
       const cart = [...state.cart, action.payload];
-      const history = [...state.history, cart];
-      const historyIndex = state.historyIndex + 1;
+      const history = [...state.history];
+      history.splice(state.historyIndex + 1, state.history.length);
+      history.push(cart);
+      const historyIndex = history.length - 1;
       return {
         ...state,
         cart,
@@ -37,7 +40,7 @@ const reducer = (state, action) => {
         historyIndex,
       };
     }
-    case "REMOVE_FROM_CART": {
+    case REMOVE_FROM_CART: {
       const cart = [...state.cart];
       cart.splice(action.payload, 1);
       const history = [...state.history, cart];
@@ -51,7 +54,7 @@ const reducer = (state, action) => {
       };
     }
 
-    case "UNDO": {
+    case UNDO: {
       let historyIndex = state.historyIndex - 1;
       historyIndex = Math.max(historyIndex, 0);
       return {
@@ -61,7 +64,7 @@ const reducer = (state, action) => {
       };
     }
 
-    case "REDO": {
+    case REDO: {
       let historyIndex = state.historyIndex + 1;
       historyIndex = Math.min(historyIndex, state.history.length - 1);
       return {
